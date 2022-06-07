@@ -11,7 +11,7 @@ public class Smithinggame extends Game {
     public void create () {
         batch = new SpriteBatch();
         Assets.load();
-        setScreen(new MainGameScreen(this));
+        setScreen(new MainMenuScreen(this));
     }
 
     @Override

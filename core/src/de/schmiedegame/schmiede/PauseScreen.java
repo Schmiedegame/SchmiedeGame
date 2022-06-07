@@ -1,36 +1,44 @@
 package de.schmiedegame.schmiede;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import jdk.tools.jmod.Main;
 
 import static com.badlogic.gdx.Gdx.gl;
 
-public class MainMenuScreen extends ScreenAdapter {
+public class PauseScreen extends ScreenAdapter {
 
     private final int WIDTH = 1000;
     private final int HEIGHT = 700;
 
+
+
     private Smithinggame game;
+    private MainGameScreen gamescreen;
 
-    private Animation<TextureRegion> background;
-    private float stateTime;
+    private TextureRegion background;
 
-    private ImageButton play_button;
-    private ImageButton help_button;
     private Stage stage;
     private Group group;
 
-    public MainMenuScreen(Smithinggame game) {
-        this.game = game;
+    private ImageButton help_button;
+    private ImageButton leave_button;
 
-        background = Assets.main_background_animation;
-        stateTime = 0f;
+    //Timer um ständiges switchen zwischen Pause und MainGameScreen zu verhindern, da Escape länger als einen frame gedrückt wird
+    private float pauseTimer;
+
+
+    public PauseScreen(Smithinggame game, MainGameScreen gamescreen) {
+        this.game = game;
+        this.gamescreen = gamescreen;
+
+        background = Assets.pause_screen_region;
 
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
@@ -38,16 +46,18 @@ public class MainMenuScreen extends ScreenAdapter {
         group = new Group();
         group.setBounds(0,0, WIDTH, HEIGHT);
 
-        play_button = new ImageButton(Assets.play_button_states.get(0), Assets.play_button_states.get(1), Assets.play_button_states.get(2));
-        play_button.setPosition(150, 300);
+        leave_button = new ImageButton(Assets.leave_button_states.get(0), Assets.leave_button_states.get(1), Assets.leave_button_states.get(2));
+        leave_button.setPosition(350, 350);
         help_button = new ImageButton(Assets.help_button_states.get(0), Assets.help_button_states.get(1), Assets.help_button_states.get(2));
-        help_button.setPosition(550, 300);
+        help_button.setPosition(350, 200);
 
-
-        group.addActor(play_button);
+        group.addActor(leave_button);
         group.addActor(help_button);
 
         stage.addActor(group);
+
+
+        pauseTimer = 0.5f;
     }
 
     @Override
@@ -57,10 +67,8 @@ public class MainMenuScreen extends ScreenAdapter {
         gl.glClearColor(0, 0, 0, 1);
         gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        stateTime += delta;
-
         game.batch.begin();
-        game.batch.draw(background.getKeyFrame(stateTime), 0, 0);
+        game.batch.draw(background, 0, 0);
         game.batch.end();
 
         game.batch.begin();
@@ -69,8 +77,8 @@ public class MainMenuScreen extends ScreenAdapter {
 
 
         //Logik
-        if (play_button.isChecked()) {
-            game.setScreen(new MainGameScreen(game));
+        if (leave_button.isChecked()) {
+            game.setScreen(new MainMenuScreen(game));
             dispose();
         }
         if (help_button.isChecked()) {
@@ -78,6 +86,15 @@ public class MainMenuScreen extends ScreenAdapter {
             hide();
         }
 
+        if (pauseTimer > 0) {
+            pauseTimer -= delta;
+        }
+        else {
+            if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
+                game.setScreen(gamescreen);
+                dispose();
+            }
+        }
     }
 
     @Override
@@ -85,7 +102,4 @@ public class MainMenuScreen extends ScreenAdapter {
         help_button.setChecked(false);
         Gdx.input.setInputProcessor(stage);
     }
-
-
-
 }

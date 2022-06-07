@@ -13,7 +13,7 @@ public class World {
 
     public World() {
         player = new Player(500, 300);
-        background = Assets.background_region;
+        background = Assets.game_background_region;
     }
 
     public void update(float delta) {
