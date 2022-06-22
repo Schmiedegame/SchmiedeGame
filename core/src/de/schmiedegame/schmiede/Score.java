@@ -82,6 +82,15 @@ public class Score {
         Print_furnace_score();
     }
 
+    //Getter
+    public static float get_processed_anvil_score(){
+        return processed_anvil_score;
+    }
+
+    public float get_processed_furnace_score(){
+        return processed_furnace_score;
+    }
+
     public static void Print_anvil_score() {
         System.out.println(processed_anvil_score);
     }
@@ -90,3 +99,4 @@ public class Score {
         System.out.println(processed_furnace_score);
     }
 }
+

@@ -86,6 +86,10 @@ public class Assets {
     public static BitmapFont font_32;
     public static BitmapFont font_100;
 
+    //Hintergrund für den ScoreScreen
+    private static Texture score_background;
+    public static TextureRegion score_background_region;
+
 
     /**
      * Initiiert alle Assets. Da alle Assets static sind, müssen sie nur einmal initialisiert werden
@@ -102,6 +106,7 @@ public class Assets {
         load_furnace_background();
         load_furnace_button();
         load_fonts();
+        load_score_background();
     }
 
 
@@ -255,5 +260,11 @@ public class Assets {
     public static void load_fonts() {
         font_32 = new BitmapFont(Gdx.files.internal("VCR_32.fnt"));
         font_100 = new BitmapFont(Gdx.files.internal("VCR_100.fnt"));
+    }
+
+    //TEMPORÄR: Black background für ScoreScreen
+    public static void load_score_background() {
+        score_background = new Texture("pause_screen.png");
+        score_background_region = new TextureRegion(score_background, 0, 0, BACKGROUND_WIDTH, BACKGROUND_HEIGHT);
     }
 }

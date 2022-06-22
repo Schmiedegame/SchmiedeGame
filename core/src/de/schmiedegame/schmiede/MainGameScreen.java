@@ -66,6 +66,10 @@ public class MainGameScreen extends ScreenAdapter {
             game.setScreen(new FurnaceGameScreen(game, this));
             hide();
         }
+        if (Gdx.input.isKeyPressed(Input.Keys.O)) {
+            game.setScreen(new ScoreScreen(game, this));
+            hide();
+        }
         //***TEMPORÄR***
 
     }
