@@ -20,24 +20,30 @@ import com.badlogic.gdx.utils.Align;
 
 import static com.badlogic.gdx.Gdx.gl;
 
+/**
+ * Grafik-Klasse des Casting-Minispiels.
+ */
 public class CastingGameScreen extends ScreenAdapter {
 
+    //Konstanten
     private final int WIDTH = 1000;
     private final int HEIGHT = 700;
 
 
-
+    //Verwaltung
     private Gamestates.state gamestate;
 
     private Smithinggame game;
+    //Objekt, von dem aus auf das Minispiel zugegriffen wurde
     private ScreenAdapter gameScreen;
     private CastingGame castinggame;
 
+
+    //Grafikelemente
     private ShapeRenderer shapeRenderer;
     private Rectangle controlRect;
 
     private TextureRegion background;
-
 
     private Button play_button;
     private Button leave_button;
@@ -54,12 +60,15 @@ public class CastingGameScreen extends ScreenAdapter {
         //Musik wird gewechselt
         MusicPlayer.play_minigame_track();
 
+
+        //Verwaltungselemente werden initialisiert
         gamestate = Gamestates.state.INACTIVE;
 
         this.game = game;
         this.gameScreen = gamescreen;
         castinggame = new CastingGame();
 
+        //Grafikelemente werden initialisiert
         shapeRenderer = new ShapeRenderer();
         shapeRenderer.setAutoShapeType(true);
         shapeRenderer.setColor(Color.GREEN);
@@ -68,13 +77,11 @@ public class CastingGameScreen extends ScreenAdapter {
 
         controlRect = new Rectangle(200, -100, 25, 300);
 
-
         group = new Group();
         group.setBounds(0, 0, WIDTH, HEIGHT);
 
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
-
 
         //Initialisierung restlicher Grafikelemente
         play_button = new ImageButton(Assets.play_button_states.get(0), Assets.play_button_states.get(1), Assets.play_button_states.get(2));
@@ -104,16 +111,31 @@ public class CastingGameScreen extends ScreenAdapter {
         stage.addActor(group);
     }
 
+    /**
+     * Methode, die jeden frame aufgerufen wird.
+     * @param delta Vergangene Zeit seit letztem frame
+     */
     @Override
     public void render(float delta) {
 
+        //Führt eine Verwaltungs- oder Logikaufgabe aus, abhängig vom Status des Spiels:
+        //ACTIVE:   Spiel ist im Gange
+        //FINISHED: Spiel wurde abgeschlossen
+        //INACTIVE: Spiel ist nicht im Gange
+        //Ablauf:
+        //1. INACTIVE -> Spiel wird gestartet
+        //2. ACTIVE -> Spiel wird gespielt
+        //3. FINISHED -> Spiel wird deaktiviert
+        //4. INACTIVE -> Spiel kann verlassen werden
         switch (gamestate) {
 
             case ACTIVE:
+
                 castinggame.Update_ControlRect(delta, controlRect);
                 background = castinggame.Update_background(delta);
                 castinggame.Update_Progress_Label(progress);
                 gamestate = castinggame.Update_gamestate();
+
                 break;
 
             case FINISHED:
@@ -146,6 +168,7 @@ public class CastingGameScreen extends ScreenAdapter {
         }
 
 
+        //Stellt Grafikelemente dar
         gl.glClearColor(0, 0, 0, 1);
         gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -162,6 +185,9 @@ public class CastingGameScreen extends ScreenAdapter {
     }
 
 
+    /**
+     * Wird aufgerufen, wenn Minispiel abgeschlossen wurde.
+     */
     private void finish_game() {
 
         instruction.setText("Ende!");
