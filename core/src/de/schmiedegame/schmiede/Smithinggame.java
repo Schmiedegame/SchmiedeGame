@@ -12,6 +12,9 @@ public class Smithinggame extends Game {
     //SpriteBatch die das gesamte Spiel über benutzt wird
     public SpriteBatch batch;
 
+    /**
+     * Methode, die den Konstruktor ersetzt.
+     */
     @Override
     public void create () {
 
@@ -31,11 +34,17 @@ public class Smithinggame extends Game {
         setScreen(new MainMenuScreen(this));
     }
 
+    /**
+     * Wird jeden Frame aufgerufen.
+     */
     @Override
     public void render () {
         super.render();
     }
 
+    /**
+     * Wird aufgerufen, wenn Objekt zerstört wird.
+     */
     @Override
     public void dispose() {
         super.dispose();
