@@ -39,7 +39,9 @@ public class CastingGame {
     private Animation<TextureRegion> background_animation;
 
 
-
+    /**
+     * Konstruktor
+     */
     public CastingGame() {
 
         position_vector = new Vector2(200, -100);
