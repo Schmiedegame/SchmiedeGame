@@ -8,13 +8,8 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 
-
-/**
- * Logik Klasse des Casting-Minispiels.
- */
 public class CastingGame {
 
-    //Konstanten
     private final int RECT_SPEED = 250;
 
     private final int LOWER_RECT_BOUNDS = -100;
@@ -26,7 +21,6 @@ public class CastingGame {
     private final float PROGRESS_SPEED = 0.1f;
 
 
-    //Logik
     private Vector2 position_vector;
 
     private float vertMovement;
@@ -34,8 +28,6 @@ public class CastingGame {
     private float gameProgress;
     private float gameTimer;
 
-
-    //Grafik
     private Animation<TextureRegion> background_animation;
 
 
@@ -52,11 +44,7 @@ public class CastingGame {
     }
 
 
-    /**
-     * Aktualisiert durch Überprüfung des Tasten-Inputs die Position des Rechtecks, den der Spieler steuert.
-     * @param delta Vergangene Zeit seit letztem Update
-     * @param controlRect Angesteuertes Rechteck
-     */
+
     public void Update_ControlRect(float delta, Rectangle controlRect) {
 
         if (Gdx.input.isKeyPressed(Input.Keys.X)) {
@@ -66,7 +54,6 @@ public class CastingGame {
             vertMovement = -1 * delta * RECT_SPEED;
         }
 
-        //Überprüfung auf Kollisionen
         if (controlRect.getY() + vertMovement < UPPER_RECT_BOUNDS && controlRect.getY() + vertMovement > LOWER_RECT_BOUNDS) {
             position_vector.y += vertMovement;
         }
@@ -77,11 +64,6 @@ public class CastingGame {
     }
 
 
-    /**
-     * Aktualisiert den Hintergrund aufgrund des Spielfortschritts, damit die Füllung der Form angezeigt wird.
-     * @param delta Vergangene Zeit seit letztem Update
-     * @return Momentan anzuzeigende TextureRegion
-     */
     public TextureRegion Update_background(float delta) {
 
         if (position_vector.y > LOWER_AIM_BOUNDS && position_vector.y < UPPER_AIM_BOUNDS) {
@@ -95,19 +77,10 @@ public class CastingGame {
     }
 
 
-    /**
-     * Aktualisiert das Label, welches den Fortschritt anzeigt.
-     * @param label Zu aktualisierendes Label
-     */
     public void Update_Progress_Label(Label label) {
         label.setText(String.valueOf((int)(gameProgress * 100)) + "%");
     }
 
-
-    /**
-     * Aktualisiert den gamestate.
-     * @return Neuer gamestate
-     */
     public Gamestates.state Update_gamestate() {
         if (gameProgress < 1) {
             return Gamestates.state.ACTIVE;

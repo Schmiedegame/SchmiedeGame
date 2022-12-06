@@ -15,9 +15,6 @@ import com.badlogic.gdx.utils.Align;
 import static com.badlogic.gdx.Gdx.gl;
 import static de.schmiedegame.schmiede.Assets.furnace_button_states;
 
-/**
- * Grafik-Klasse des Furnace-Minispiels.
- */
 public class FurnaceGameScreen extends ScreenAdapter {
 
     private final int WIDTH = 1000;
@@ -33,7 +30,7 @@ public class FurnaceGameScreen extends ScreenAdapter {
     private FurnaceGame furnacegame;
 
 
-    //Grafikelemente
+
     private TextureRegion background;
 
     private Group group;

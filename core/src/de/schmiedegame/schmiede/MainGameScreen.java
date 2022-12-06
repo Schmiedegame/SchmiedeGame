@@ -5,13 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.scenes.scene2d.Group;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.Touchable;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.utils.Align;
 
 import static com.badlogic.gdx.Gdx.gl;
 
@@ -24,8 +18,6 @@ public class MainGameScreen extends ScreenAdapter {
 
     private final float PAUSE_TIME = 0.5f;
     private final Color prompt_color = new Color(0.6f, 0f, 0f, 0.4f);
-    private final int WIDTH = 1000;
-    private final int HEIGHT = 700;
 
 
     private Gamestates.prompt_state prompt_state;
@@ -33,13 +25,6 @@ public class MainGameScreen extends ScreenAdapter {
     private Smithinggame game;
     //World, die alles was mit dem Spiel zu tun hat, enthält
     private World world;
-
-    private Label saved_label;
-
-    private TextureRegion promptX;
-
-    private Group group;
-    private Stage stage;
 
     //Begrenzungen der Interaktionsbereiche
     private int[][][] interaction_bounds;
@@ -52,8 +37,6 @@ public class MainGameScreen extends ScreenAdapter {
 
     //Timer, um zu verhindern, dass der Bildschirm sofort wieder auf Pause wechselt, wenn man zurückkehrt, da der Benutzer die Escape-Taste nicht nach einem Frame wieder loslässt.
     private float pauseTimer;
-
-    private boolean prompt_player;
 
 
     /**
@@ -74,30 +57,7 @@ public class MainGameScreen extends ScreenAdapter {
         this.game = game;
         world = new World();
 
-
-        //Grafikelemente
-        saved_label = new Label("Nimm einen Auftrag an", new Label.LabelStyle(Assets.font_32, Color.WHITE));
-        saved_label.setBounds(0, 0, WIDTH, 150);
-        saved_label.setAlignment(Align.center);
-        saved_label.setTouchable(Touchable.disabled);
-
-        promptX = Assets.promptX;
-
-        group = new Group();
-        group.setBounds(0, 0, WIDTH, HEIGHT);
-
-        stage = new Stage();
-        Gdx.input.setInputProcessor(stage);
-
-        group.addActor(saved_label);
-
-        stage.addActor(group);
-
-
-
         pauseTimer = PAUSE_TIME;
-
-        prompt_player = false;
 
         shapeRenderer = new ShapeRenderer();
         shapeRenderer.setColor(prompt_color);
@@ -119,15 +79,7 @@ public class MainGameScreen extends ScreenAdapter {
         shapeRenderer.rect(prompt_rect_parameters[0], prompt_rect_parameters[1], prompt_rect_parameters[2], prompt_rect_parameters[3]);
         shapeRenderer.end();
 
-        if (prompt_player) {
-            game.batch.begin();
-            game.batch.draw(promptX, 450, 100);
-            game.batch.end();
-        }
-
         world.draw_player(game.batch);
-
-        stage.draw();
 
         //Überprüfung der Escape-Taste zum Aufrufen des Pause-Bildschirms mit Überprüfung des Timers.
         if (pauseTimer > 0) {
@@ -169,7 +121,7 @@ public class MainGameScreen extends ScreenAdapter {
      */
     private void update_interaction() {
 
-        int player_x = (int)world.getPlayer().getPosition().x + (Assets.PLAYER_WIDTH/2);
+        int player_x = (int)world.getPlayer().getPosition().x;
         int player_y = (int)world.getPlayer().getPosition().y;
 
         boolean xPressed = Gdx.input.isKeyPressed(Input.Keys.X);
@@ -184,20 +136,10 @@ public class MainGameScreen extends ScreenAdapter {
                 player_in_y = player_y > interaction_bounds[0][1][0] && player_y < interaction_bounds[0][1][1];
 
                 if(player_in_x && player_in_y) {
-
-                    prompt_player = true;
-
                     if (xPressed) {
-
                         change_state();
-                        saved_label.setText("AUFTRAG ANGENOMMEN! Geh zum Ofen!");
                     }
                 }
-                else {
-                    prompt_player = false;
-                }
-
-
 
                 break;
 
@@ -206,18 +148,10 @@ public class MainGameScreen extends ScreenAdapter {
                 player_in_y = player_y > interaction_bounds[1][1][0] && player_y < interaction_bounds[1][1][1];
 
                 if(player_in_x && player_in_y) {
-
-                    prompt_player = true;
-
                     if (xPressed) {
-
                         change_state();
-                        saved_label.setText("Geh zur Form!");
                         game.setScreen(new FurnaceGameScreen(game, this));
                     }
-                }
-                else {
-                    prompt_player = false;
                 }
 
                 break;
@@ -227,18 +161,10 @@ public class MainGameScreen extends ScreenAdapter {
                 player_in_y = player_y > interaction_bounds[2][1][0] && player_y < interaction_bounds[2][1][1];
 
                 if(player_in_x && player_in_y) {
-
-                    prompt_player = true;
-
                     if (xPressed) {
-
                         change_state();
-                        saved_label.setText("Geh zum Amboss!");
                         game.setScreen(new CastingGameScreen(game, this));
                     }
-                }
-                else {
-                    prompt_player = false;
                 }
 
                 break;
@@ -248,18 +174,10 @@ public class MainGameScreen extends ScreenAdapter {
                 player_in_y = player_y > interaction_bounds[3][1][0] && player_y < interaction_bounds[3][1][1];
 
                 if(player_in_x && player_in_y) {
-
-                    prompt_player = true;
-
                     if (xPressed) {
-
                         change_state();
-                        saved_label.setText("Beende den Auftrag!");
                         game.setScreen(new AnvilGameScreen(game, this));
                     }
-                }
-                else {
-                    prompt_player = false;
                 }
 
                 break;
@@ -269,22 +187,11 @@ public class MainGameScreen extends ScreenAdapter {
                 player_in_y = player_y > interaction_bounds[4][1][0] && player_y < interaction_bounds[4][1][1];
 
                 if(player_in_x && player_in_y) {
-
-                    prompt_player = true;
-
                     if (xPressed) {
-
                         change_state();
-                        saved_label.setText("SPIEL GESPEICHERT");
                         game.setScreen(new ScoreScreen(game, this));
-                        Score.iterate();
-                        Score.reset();
                     }
                 }
-                else {
-                    prompt_player = false;
-                }
-
 
                 break;
         }

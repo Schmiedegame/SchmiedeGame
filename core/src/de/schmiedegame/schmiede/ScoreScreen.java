@@ -25,14 +25,12 @@ public class ScoreScreen extends ScreenAdapter {
     private int score_casting;
     private int total_score;
 
-
     //Main-Game Objekt und MainGameScreen Objekt, von dem aus auf der Screen zugegriffen wurde.
     private Smithinggame game;
     private MainGameScreen gameScreen;
 
     private TextureRegion background;
 
-    //Labels
     private Label scoreText1;
     private Label scoreText2;
     private Label scoreText3;
@@ -43,8 +41,6 @@ public class ScoreScreen extends ScreenAdapter {
     private Label scorePoint3;
     private Label totalScore;
 
-
-    //Sonstige Grafikelemente
     private ImageButton leave_button;
 
     private ShapeRenderer rectangle;
@@ -63,7 +59,7 @@ public class ScoreScreen extends ScreenAdapter {
         this.game = game;
         this.gameScreen = gameScreen;
 
-        //Auslesung der gespeicherten Punktestände
+        //TEMP: hier statt absoluten Zahlen die saves auslesen!!!
         score_furnace = Score.getFurnaceScore();
         score_casting = Score.getCastingScore();
         score_anvil = Score.getAnvilScore();
@@ -77,7 +73,7 @@ public class ScoreScreen extends ScreenAdapter {
         Gdx.input.setInputProcessor(stage);
 
 
-        //Initialisierung aller Grafikelemente
+
         background = Assets.score_background_region;
 
         scoreText1 = new Label("Schmelzofen:", new Label.LabelStyle(Assets.font_100, Color.WHITE));
@@ -135,11 +131,7 @@ public class ScoreScreen extends ScreenAdapter {
 
     }
 
-    /**
-     * Wird jeden frame ausgeführt.
-     * Stellt Grafikelemente dar.
-     * @param delta Vergangene Zeit seit letztem Frame
-     */
+    //Stellt die Grafikelemente dar.
     @Override
     public void render(float delta){
 
@@ -166,10 +158,6 @@ public class ScoreScreen extends ScreenAdapter {
         }
     }
 
-    /**
-     * Wird bei Löschen des Objekts aufgerufen.
-     * Punktzahl wird gespeichert und dann zurückgesetzt.
-     */
     @Override
     public void dispose() {
         Score.iterate();
